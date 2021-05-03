@@ -19,7 +19,7 @@ headers = {
     'accept-language': 'en-US,en;q=0.9,es;q=0.8',
 }
 
-# Put the dates you want (even though the API returns a week's schedule)
+# Put the dates you want (even though the API returns the week's schedule)
 dates=['03-05-2021','04-05-2021','05-05-2021', '06-05-2021', '07-05-2021','08-05-2021']
 
 
