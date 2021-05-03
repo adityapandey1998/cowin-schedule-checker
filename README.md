@@ -1,4 +1,3 @@
-# cowin-schedule-checker
 COWIN Vaccination Schedule Checker
 ==============================
 
