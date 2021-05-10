@@ -2,6 +2,9 @@ import requests
 import beepy
 import time
 
+from datetime import datetime, timedelta
+
+  
 headers = {
     'authority': 'cdn-api.co-vin.in',
     'pragma': 'no-cache',
@@ -19,40 +22,53 @@ headers = {
     'accept-language': 'en-US,en;q=0.9,es;q=0.8',
 }
 
-# Put the dates you want (even though the API returns the week's schedule)
-dates=['03-05-2021','04-05-2021','05-05-2021', '06-05-2021', '07-05-2021','08-05-2021']
+today = datetime.now() # or today = datetime.today()
 
+# District ID is representative of City/Area
+# Current entry is for BBMP/Bangalore Urban
+district_ids = ['294','265']
+
+# Put your the pincodes closest to you
+required_pincodes={560078,560076,560011}
+# Put your the vaccine you are looking for
+required_vaccine={"COVAXIN","COVISHIELD"}
+# Put the age slot (18/45)
+required_age=45
 
 while True: 
-    for date in dates: 
-        try:
-            url='https://cdn-api.co-vin.in/api/v2/appointment/sessions/calendarByDistrict?district_id=294&date='+date
-            response = requests.get(url, headers=headers)
-            responseJSON = response.json()
-            for center in responseJSON['centers']:
-                for session in center['sessions']: 
-                    if session['min_age_limit'] == 18 and session['available_capacity'] > 1:
-                        dataJSON = {
-                            'name' : center['name'],
-                            'pincode' : center['pincode'],
-                            'date' : session['date'],
-                            'slots' : session['slots'],
-                            'min_age_limit' : session['min_age_limit'],
-                            'available_capacity': session['available_capacity']
-                        }
-                        print(dataJSON)
-                        print()
-                        # Put your the pincodes closest to you
-                        if dataJSON['pincode'] in [560078,560076,560011]: 
-                            beepy.beep(sound='success')
-                            beepy.beep(sound='success')
-                        else:
-                            beepy.beep(sound='coin')
-                    
-            print("Searched Response for date "+date)
-        except:
-            print("Some Error for date "+date)
-        finally: 
-            # beepy.beep(sound='coin')
-            time.sleep(2)
+    for days in range(6):
+        dateObj = today + timedelta(days)
+        date = dateObj.strftime("%d-%m-%Y")
+        for district_id in district_ids: 
+            try:
+                url='https://cdn-api.co-vin.in/api/v2/appointment/sessions/calendarByDistrict?district_id='+district_id+'&date='+date
+                response = requests.get(url, headers=headers)
+                responseJSON = response.json()
+                for center in responseJSON['centers']:
+                    for session in center['sessions']: 
+                        if session['min_age_limit'] == required_age and session['available_capacity'] > 1 and session['vaccine'] in required_vaccine:
+                            dataJSON = {
+                                'name' : center['name'],
+                                'pincode' : center['pincode'],
+                                'date' : session['date'],
+                                'slots' : session['slots'],
+                                'min_age_limit' : session['min_age_limit'],
+                                'available_capacity': session['available_capacity'],
+                                'vaccine': session['vaccine'],
+                                'fee_type': center['fee_type']
+                            }
+                            print()
+                            if dataJSON['pincode'] in required_pincodes: 
+                                print(dataJSON)
+                                beepy.beep(sound='success')
+                            else:
+                                print(dataJSON)
+                                # beepy.beep(sound='coin')
+                        
+                print("Searched Response for date "+date)
+            except:
+                print("Some Error for date "+date)
+            finally: 
+                # beepy.beep(sound='coin')
+                time.sleep(2)
     time.sleep(5)
