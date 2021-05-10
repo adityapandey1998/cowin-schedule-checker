@@ -12,4 +12,4 @@ How To Use This
 ---------------
 
 1. Run `pip/pip3 install -r requirements.txt` to install dependencies
-2. Run `python/python3 app.py`
+2. Run `python/python3 covax.py`
