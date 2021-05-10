@@ -25,6 +25,12 @@ headers = {
 today = datetime.now() # or today = datetime.today()
 
 # District ID is representative of City/Area
+# For more IDs - 
+# # Get state IDs - 
+# # # GET https://cdn-api.co-vin.in/api/v2/admin/location/states
+# # Get district IDs - 
+# # # GET https://cdn-api.co-vin.in/api/v2/admin/location/districts/<state_id>
+
 # Current entry is for BBMP/Bangalore Urban
 district_ids = ['294','265']
 
