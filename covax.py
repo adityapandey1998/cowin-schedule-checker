@@ -25,24 +25,18 @@ headers = {
 today = datetime.now() # or today = datetime.today()
 
 # District ID is representative of City/Area
-# For more IDs - 
-# # Get state IDs - 
-# # # GET https://cdn-api.co-vin.in/api/v2/admin/location/states
-# # Get district IDs - 
-# # # GET https://cdn-api.co-vin.in/api/v2/admin/location/districts/<state_id>
-
 # Current entry is for BBMP/Bangalore Urban
 district_ids = ['294','265']
 
 # Put your the pincodes closest to you
 required_pincodes={560078,560076,560011}
 # Put your the vaccine you are looking for
-required_vaccine={"COVAXIN","COVISHIELD"}
+required_vaccine={"COVAXIN"}
 # Put the age slot (18/45)
 required_age=45
 
 while True: 
-    for days in range(6):
+    for days in range(1):
         dateObj = today + timedelta(days)
         date = dateObj.strftime("%d-%m-%Y")
         for district_id in district_ids: 
@@ -69,12 +63,12 @@ while True:
                                 beepy.beep(sound='success')
                             else:
                                 print(dataJSON)
-                                # beepy.beep(sound='coin')
+                                beepy.beep(sound='coin')
                         
                 print("Searched Response for date "+date)
             except:
                 print("Some Error for date "+date)
             finally: 
                 # beepy.beep(sound='coin')
-                time.sleep(2)
-    time.sleep(5)
+                time.sleep(1)
+    # time.sleep(2)
